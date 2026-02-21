@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feed</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px 30px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+    }
+
+    .create-post {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .create-post input[type="text"],
+    .create-post input[type="file"] {
+      width: 100%;
+      margin: 8px 0;
+      padding: 8px;
+    }
+
+    .create-post button {
+      width: 100%;
+      padding: 10px;
+      background: #1877f2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .post-user {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .post-caption {
+      margin-bottom: 10px;
+    }
+
+    .post-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .actions button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .pagination a {
+      text-decoration: none;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 6px;
+      margin: 0 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  Mini Social 🚀
+</div>
+
+<div class="container">
+
+  <!-- Create Post -->
+  <div class="create-post">
+    <form action="/create" method="POST" enctype="multipart/form-data">
+      <input type="text" name="caption" placeholder="What's on your mind?" required>
+      <input type="file" name="image" required>
+      <button type="submit">Post</button>
+    </form>
+  </div>
+
+  <!-- Posts -->
+  <% posts.forEach(post => { %>
+    <div class="post-card">
+      <div class="post-user">
+        <%= post.user ? post.user.name : "Unknown User" %>
+      </div>
+
+      <div class="post-caption">
+        <%= post.caption %>
+      </div>
+
+      <% if (post.image) { %>
+        <img src="/uploads/<%= post.image %>">
+      <% } %>
+
+      <div class="actions">
+        <form action="/delete/<%= post._id %>" method="POST">
+          <button class="delete-btn">Delete</button>
+        </form>
+      </div>
+    </div>
+  <% }) %>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <a href="/feed?page=<%= page - 1 > 0 ? page - 1 : 1 %>">Prev</a>
+    <a href="/feed?page=<%= page + 1 %>">Next</a>
+  </div>
+
+</div>
+
+</body>
+</html>
